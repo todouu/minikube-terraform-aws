@@ -7,7 +7,7 @@ resource "aws_instance" "this" {
 
   ami              = var.ami
   instance_type    = var.instance_type
-  user_data        = length(var.user_data) > 0 ? var.user_data : file("./init.sh")
+  user_data        = var.user_data
   subnet_id = length(var.network_interface) > 0 ? null : element(
     distinct(compact(concat([var.subnet_id], var.subnet_ids))),
     count.index,
