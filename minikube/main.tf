@@ -63,6 +63,12 @@ module "ec2-user-role" {
   tags = local.tags
 }
 
+module "ec2-key"{
+  source = "./module/key-pair"
+
+  key_pair_names = ["minikube-ec2-key"]
+}
+
 module "minikube-ec2" {
   source = "./module/ec2"
 
@@ -73,6 +79,7 @@ module "minikube-ec2" {
   user_data                   = file("./ec2-init.sh")
   ami                         = ""
   instance_type               = "t2.small"
+  key_name                    = module.ec2-key.key_name
 
   root_block_device = [
     {
