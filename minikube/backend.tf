@@ -1,17 +1,19 @@
 terraform {
   backend "s3" {
-    bucket         = "you_bucket"
+    bucket         = "minikube-terraform-toc"
     key            = "terraform.tfstate"
     region         = "ap-southeast-1"
     encrypt        = true
     dynamodb_table = "lock_of_terraform"
   }
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
 }
 
 provider "aws" {
   region  = "ap-southeast-1"
-  version = "2.66"
-  ignore_tags {
-    key_prefixes = ["kubernetes.io/"]
-  }
 }
