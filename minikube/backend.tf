@@ -1,10 +1,9 @@
 terraform {
   backend "s3" {
-    bucket         = "minikube-terraform-toc"
+    bucket         = "youBukcet"
     key            = "terraform.tfstate"
     region         = "ap-southeast-1"
     encrypt        = true
-    dynamodb_table = "lock_of_terraform"
   }
   required_providers {
     aws = {

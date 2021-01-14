@@ -2,6 +2,7 @@ locals {
   tags = {
     project = "minikube"
   }
+  my_ip = ""
 }
 
 
@@ -30,7 +31,7 @@ module "ec2-sg" {
     from_port   = 22,
     to_port     = 22,
     protocol    = "tcp",
-    cidr_blocks = join(",", module.vpc.vpc_public_cidr)
+    cidr_blocks = local.my_ip
   }]
 
   egress_with_cidr_blocks = [{
@@ -69,26 +70,6 @@ module "ec2-key"{
   key_pair_names = ["minikube-ec2-key"]
 }
 
-data aws_ami "centos"{
-  owners           = ["self"]
-  most_recent      = true
-
-  filter {
-      name   = "name"
-      values = ["CentOS Linux 7 x86_64 HVM EBS *"]
-  }
-
-  filter {
-      name   = "virtualization-type"
-      values = ["hvm"]
-  }
-
-    filter {
-      name   = "root-device-type"
-      values = ["ebs"]
-  }
-}
-
 module "minikube-ec2" {
   source = "./module/ec2"
 
@@ -97,9 +78,9 @@ module "minikube-ec2" {
   vpc_security_group_ids      = module.ec2-sg.security_group_id
   associate_public_ip_address = true
   user_data                   = file("./ec2-init.sh")
-  ami_id                      = data.aws_ami.centos.image_id
-  instance_type               = "t2.small"
-  key_name                    = module.ec2-key.key_name
+  ami_id                      = "ami-00b8d9cb8a7161e41"
+  instance_type               = "t2.medium"
+  key_name                    = module.ec2-key.key_name[0]
 
   root_block_device = [
     {

@@ -89,9 +89,9 @@ resource "aws_subnet" "private" {
 # NAT Gateway
 ##############
 resource "aws_route" "gut_nat_gateway" {
-  count = var.create_vpc && var.enable_nat_gateway && length(var.gut_subnet_cidr) > 0 ? length(var.gut_subnet_cidr) : 0
+  count = var.create_vpc && var.enable_nat_gateway ? length(var.private_subnet_cidr) : 0
 
-  route_table_id         = element(aws_route_table.gut.*.id, count.index)
+  route_table_id         = element(aws_route_table.private.*.id, count.index)
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = element(var.nat_gateway_ids, count.index)
 
