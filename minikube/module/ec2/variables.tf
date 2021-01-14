@@ -9,7 +9,7 @@ variable "instance_count" {
   default     = 1
 }
 
-variable "ami" {
+variable "ami_id" {
   description = "ID of AMI to use for the instance"
   type        = string
 }
